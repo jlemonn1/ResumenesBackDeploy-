@@ -61,7 +61,11 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
         System.out.println("🔍 FRONT_SERVER in CORS = " + frontServer);
 
-        config.setAllowedOriginPatterns(List.of(frontServer));
+        config.setAllowedOriginPatterns(List.of(
+                frontServer, // Cargado de env
+                "http://localhost:5173" // Solo para dev
+        ));
+
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
         config.setExposedHeaders(List.of("Authorization"));
