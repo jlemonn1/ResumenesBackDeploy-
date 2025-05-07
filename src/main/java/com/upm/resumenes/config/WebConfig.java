@@ -6,11 +6,19 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
+
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/{spring:\\w+}")
+        // Rutas como /profile, /search, /algo
+        registry.addViewController("/{spring:[\\w\\-]+}")
                 .setViewName("forward:/index.html");
-        registry.addViewController("/**/{spring:\\w+}")
+
+        // Rutas anidadas como /profile/editar, /search/resultados
+        registry.addViewController("/**/{spring:[\\w\\-]+}")
+                .setViewName("forward:/index.html");
+
+        // Catch-all para SPA que no coincidan con estáticos
+        registry.addViewController("/{spring:[\\w\\-]+}/**{spring:?!(\\.js|\\.css)$}")
                 .setViewName("forward:/index.html");
     }
 }
