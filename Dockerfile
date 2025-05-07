@@ -1,19 +1,24 @@
 FROM eclipse-temurin:17-jdk-alpine
 
-# Instalamos bash y Maven
+# Instalar bash y Maven
 RUN apk add --no-cache bash maven
 
-# Establecemos directorio de trabajo
+# Directorio de trabajo
 WORKDIR /app
 
-# Copiamos el proyecto completo
+# Copiar solo archivos de dependencias y descargarlas primero
+COPY pom.xml ./
+RUN mvn dependency:go-offline -B
+
+# Ahora copiamos el resto del proyecto
 COPY . .
 
-# Compilamos la app sin tests
-RUN mvn clean package -DskipTests
+# Compilamos el jar y lo renombramos
+RUN mvn clean package -DskipTests && \
+    cp target/*.jar app.jar
 
-# Exponemos el puerto de Spring Boot
+# Exponer el puerto
 EXPOSE 8080
 
-# Ejecutamos la app
-CMD ["java", "-jar", "target/*.jar"]
+# Verificamos que exista app.jar y lo ejecutamos
+ENTRYPOINT ["sh", "-c", "if [ -f app.jar ]; then java -jar app.jar; else echo '❌ No se encontró app.jar' && exit 1; fi"]
