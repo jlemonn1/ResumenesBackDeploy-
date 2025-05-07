@@ -18,7 +18,7 @@ RUN mvn clean package -DskipTests && \
     cp target/*.jar app.jar
 
 # Exponer el puerto
-EXPOSE 8080
+EXPOSE 80
 
 # Verificamos que exista app.jar y lo ejecutamos
 ENTRYPOINT ["sh", "-c", "if [ -f app.jar ]; then java -jar app.jar; else echo '❌ No se encontró app.jar' && exit 1; fi"]

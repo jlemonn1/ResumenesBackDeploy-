@@ -46,7 +46,7 @@ public class DocumentController {
         return ResponseEntity.ok(documentService.uploadDocument(file, request, userId));
     }
 
-    @CrossOrigin(origins = "${front.server}")
+    
     @GetMapping
     public ResponseEntity<List<DocumentResponseDTO>> listDocuments(
             @AuthenticationPrincipal UserDetails userDetails) {
